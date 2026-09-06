@@ -1111,7 +1111,7 @@ dependencies = [
 
 [[package]]
 name = "fighting-stick-core"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "serde",
  "serde_json",
@@ -1120,7 +1120,7 @@ dependencies = [
 
 [[package]]
 name = "fighting-stick-desktop"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "eframe",
  "fighting-stick-core",
@@ -1130,7 +1130,7 @@ dependencies = [
 
 [[package]]
 name = "fighting-stick-input"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "fighting-stick-core",
  "sdl2",
@@ -1139,7 +1139,7 @@ dependencies = [
 
 [[package]]
 name = "fighting-stick-midi"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "fighting-stick-core",
  "midir",

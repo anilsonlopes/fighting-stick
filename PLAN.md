@@ -61,4 +61,4 @@ A inspiração será o fluxo dos dispositivos Gamepad Control e GAMEPAD M4L: map
 - loopMIDI é uma dependência externa aceita.
 - O código-fonte e os builds publicados deste projeto ficam disponíveis em um repositório público no GitHub.
 - O modelo exato do Fighting Stick Mini será identificado no primeiro teste; a v1 não dependerá de uma tabela fixa de botões.
-- Releases versionadas disponibilizam um ZIP contendo somente o executável Windows; documentação e ajuda ficam no app e no repositório.
+- Releases versionadas disponibilizam diretamente o executável Windows, sem ZIP; documentação e ajuda ficam no app e no repositório.

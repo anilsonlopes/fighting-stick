@@ -6,7 +6,7 @@ Aplicativo Windows que transforma um arcade stick reconhecido pelo SDL2 em notas
 
 ### Download pronto para Windows
 
-Baixe `FightingStickMidi-*-windows-x64.zip` na página de [Releases](https://github.com/anilsonlopes/fighting-stick/releases). Extraia o arquivo e execute `FightingStickMidi.exe`. O loopMIDI continua sendo necessário.
+Baixe `FightingStickMidi.exe` na página de [Releases](https://github.com/anilsonlopes/fighting-stick/releases) e execute-o. O loopMIDI continua sendo necessário.
 
 ### Compilar o código-fonte
 
@@ -38,4 +38,4 @@ git tag -a v0.2.0 -m "Fighting Stick MIDI v0.2.0"
 git push origin v0.2.0
 ```
 
-Cada Release contém um ZIP somente com o executável Windows e seu checksum SHA-256. A documentação fica acessível pelo menu **Ajuda** do aplicativo e pelo repositório. A pasta local `target/` permanece fora do Git.
+Cada Release contém somente o executável Windows. A documentação fica acessível pelo menu **Ajuda** do aplicativo e pelo repositório. A pasta local `target/` permanece fora do Git.
