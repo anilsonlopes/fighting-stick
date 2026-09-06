@@ -1,0 +1,12 @@
+[package]
+name = "fighting-stick-desktop"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+eframe.workspace = true
+fighting-stick-core = { path = "../../crates/core" }
+fighting-stick-input = { path = "../../crates/input" }
+fighting-stick-midi = { path = "../../crates/midi" }
+

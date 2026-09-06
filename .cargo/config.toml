@@ -1,0 +1,4 @@
+[env]
+# SDL2 0.38 still declares compatibility with policies older than CMake 3.5.
+# CMake 4 requires legacy projects to opt into the supported policy floor.
+CMAKE_POLICY_VERSION_MINIMUM = "3.5"

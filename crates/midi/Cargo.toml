@@ -1,0 +1,11 @@
+[package]
+name = "fighting-stick-midi"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+fighting-stick-core = { path = "../core" }
+midir.workspace = true
+thiserror.workspace = true
+
