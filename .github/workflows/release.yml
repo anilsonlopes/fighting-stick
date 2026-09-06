@@ -13,7 +13,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Select stable Rust
         shell: pwsh
@@ -52,4 +52,3 @@ jobs:
             --verify-tag `
             --generate-notes `
             --title "Fighting Stick MIDI ${{ github.ref_name }}"
-
