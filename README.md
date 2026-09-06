@@ -4,6 +4,12 @@ Aplicativo Windows que transforma um arcade stick reconhecido pelo SDL2 em notas
 
 ## Começar
 
+### Download pronto para Windows
+
+Baixe `FightingStickMidi-*-windows-x64.zip` na página de [Releases](https://github.com/anilsonlopes/fighting-stick/releases). Extraia o arquivo e execute `FightingStickMidi.exe`. O loopMIDI continua sendo necessário.
+
+### Compilar o código-fonte
+
 1. Abra o PowerShell na raiz do projeto e execute `Set-ExecutionPolicy -Scope Process Bypass`.
 2. Execute `.\setup.ps1`. O script instala Rust/Cargo, CMake e o Visual Studio Build Tools com suporte C++ e roda os testes. A instalação pode pedir elevação de administrador.
 3. Instale o [loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html) e crie uma porta chamada `Fighting Stick MIDI`.
@@ -22,3 +28,14 @@ Os perfis são gravados em `%APPDATA%\FightingStickMidi`. O padrão envia C1–B
 - `cargo clippy --workspace --all-targets -- -D warnings`: análise estática.
 
 Consulte [arquitetura e decisões](docs/ARCHITECTURE.md) e [solução de problemas](docs/TROUBLESHOOTING.md).
+
+## Publicar uma versão
+
+O workflow `.github/workflows/release.yml` compila e publica automaticamente ao receber uma tag `v*`:
+
+```powershell
+git tag -a v0.2.0 -m "Fighting Stick MIDI v0.2.0"
+git push origin v0.2.0
+```
+
+Cada Release contém o executável Windows, a documentação e o checksum SHA-256 do ZIP. A pasta local `target/` permanece fora do Git.
