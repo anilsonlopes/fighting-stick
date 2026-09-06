@@ -47,5 +47,6 @@ A inspiração será o fluxo dos dispositivos Gamepad Control e GAMEPAD M4L: map
 
 - Windows 11 é o ambiente de uso.
 - loopMIDI é uma dependência externa aceita.
+- O código-fonte e os builds publicados deste projeto ficam disponíveis em um repositório público no GitHub.
 - O modelo exato do Fighting Stick Mini será identificado no primeiro teste; a v1 não dependerá de uma tabela fixa de botões.
 - A entrega inicial é código-fonte, não instalador nem `.exe`.
