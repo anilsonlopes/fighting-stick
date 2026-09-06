@@ -155,6 +155,26 @@ impl eframe::App for App {
                     Color32::YELLOW
                 };
                 ui.label(RichText::new(format!("● {}", self.status)).color(color));
+                ui.menu_button("Ajuda", |ui| {
+                    ui.label(format!("Versão {}", env!("CARGO_PKG_VERSION")));
+                    ui.separator();
+                    ui.hyperlink_to(
+                        "Como usar",
+                        "https://github.com/anilsonlopes/fighting-stick#readme",
+                    );
+                    ui.hyperlink_to(
+                        "Configurar no Ableton Live",
+                        "https://github.com/anilsonlopes/fighting-stick/blob/main/docs/ABLETON.md",
+                    );
+                    ui.hyperlink_to(
+                        "Solução de problemas",
+                        "https://github.com/anilsonlopes/fighting-stick/blob/main/docs/TROUBLESHOOTING.md",
+                    );
+                    ui.hyperlink_to(
+                        "Downloads e atualizações",
+                        "https://github.com/anilsonlopes/fighting-stick/releases",
+                    );
+                });
             });
         });
 

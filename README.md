@@ -38,4 +38,4 @@ git tag -a v0.2.0 -m "Fighting Stick MIDI v0.2.0"
 git push origin v0.2.0
 ```
 
-Cada Release contém o executável Windows, a documentação e o checksum SHA-256 do ZIP. A pasta local `target/` permanece fora do Git.
+Cada Release contém um ZIP somente com o executável Windows e seu checksum SHA-256. A documentação fica acessível pelo menu **Ajuda** do aplicativo e pelo repositório. A pasta local `target/` permanece fora do Git.
