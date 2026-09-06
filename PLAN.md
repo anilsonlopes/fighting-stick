@@ -10,13 +10,24 @@ A inspiração será o fluxo dos dispositivos Gamepad Control e GAMEPAD M4L: map
 
 - Projeto Rust em workspace, entregue inicialmente como código-fonte:
   - `crates/core`: perfis, atribuições, validação e máquina de estados MIDI.
-  - `crates/input`: SDL2 Game Controller API para detectar o stick e normalizar botões/direções.
+  - `crates/input`: SDL2 Joystick API para detectar o stick e normalizar botões, hats e eixos sem depender de um perfil GameControllerDB completo.
   - `crates/midi`: saída MIDI para a porta loopMIDI selecionada.
   - `apps/desktop`: interface Windows em egui/eframe.
   - `docs`: instalação, uso no Live, pesquisa e troubleshooting.
 - Usar o identificador SDL (GUID + nome) para selecionar e persistir um perfil por controle. SDL permite complementar mapeamentos por `gamecontrollerdb.txt` quando um modelo Hori não for reconhecido corretamente. [Cycling ’74: `gamepad`](https://docs.cycling74.com/reference/gamepad/)
 - Salvar os perfis em `%APPDATA%\\FightingStickMidi`, incluindo porta MIDI escolhida, dispositivo selecionado, mapeamentos e velocidade padrão.
 - Tela única com: estado do dispositivo, seleção da porta MIDI, grade de mapeamento, Learn por controle, teste visual de entradas e salvar/restaurar perfil.
+
+## Bandeja do sistema — próxima etapa
+
+- Adicionar um ícone nativo na área de notificação do Windows, mantendo a captura do controle e a conexão MIDI ativas enquanto a janela estiver oculta.
+- Minimizar ou fechar a janela pelo `X` deve ocultá-la e remover sua presença da barra de tarefas, sem encerrar o processo.
+- Clique duplo no ícone deve restaurar e trazer a janela para frente. O menu de contexto terá **Abrir**, **Parar todas as notas** e **Sair**.
+- Apenas **Sair** encerrará o processo. Antes de sair, o app deve emitir `Note Off` para cada nota ativa e `All Notes Off`, desconectar a saída MIDI e remover o ícone da bandeja.
+- Exibir uma notificação discreta na primeira vez que a janela for enviada para a bandeja, evitando que o usuário pense que o aplicativo fechou. Não repetir a notificação após o usuário já ter visto esse comportamento.
+- Persistir em `%APPDATA%\\FightingStickMidi` a confirmação de que a dica da bandeja já foi exibida; não habilitar inicialização automática com o Windows nesta etapa.
+- Implementação prevista: integrar uma biblioteca Rust de tray icon compatível com o event loop do `winit`/`eframe`; encaminhar eventos do ícone para a aplicação e controlar visibilidade, foco e fechamento por comandos de viewport.
+- A janela oculta deve reduzir a frequência de repintura da interface, mas continuar processando eventos SDL e MIDI com baixa latência. A rotina de entrada não pode depender da janela estar visível.
 
 ## Comportamento MIDI
 
@@ -42,6 +53,7 @@ A inspiração será o fluxo dos dispositivos Gamepad Control e GAMEPAD M4L: map
 - Testes com fonte de eventos simulados para confirmar a sequência MIDI correta.
 - Validação manual no Windows 11 com o Hori conectado: identificação do dispositivo, configuração completa via Learn, disparo dos 12 pads no Drum Rack e ausência de notas presas após desconectar.
 - Documentar como capturar nome/GUID e adicionar um mapeamento SDL caso o modelo Hori desconhecido não exponha os controles esperados.
+- Validar no Windows 11 que minimizar e fechar ocultam o app da barra de tarefas; clique duplo e **Abrir** restauram a janela; MIDI continua funcionando com a janela oculta; **Parar todas as notas** funciona pelo menu; e **Sair** não deixa notas presas nem ícone órfão.
 
 ## Premissas
 
@@ -49,4 +61,4 @@ A inspiração será o fluxo dos dispositivos Gamepad Control e GAMEPAD M4L: map
 - loopMIDI é uma dependência externa aceita.
 - O código-fonte e os builds publicados deste projeto ficam disponíveis em um repositório público no GitHub.
 - O modelo exato do Fighting Stick Mini será identificado no primeiro teste; a v1 não dependerá de uma tabela fixa de botões.
-- A entrega inicial é código-fonte, não instalador nem `.exe`.
+- Releases versionadas disponibilizam um ZIP contendo somente o executável Windows; documentação e ajuda ficam no app e no repositório.
