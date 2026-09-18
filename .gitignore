@@ -1,6 +1,6 @@
 /target
+/dist
 *.pdb
 *.dll
 .idea/
 .vscode/
-

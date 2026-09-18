@@ -6,7 +6,9 @@ Aplicativo Windows que transforma um arcade stick reconhecido pelo SDL2 em notas
 
 ### Download pronto para Windows
 
-Baixe `FightingStickMidi.exe` na página de [Releases](https://github.com/anilsonlopes/fighting-stick/releases) e execute-o. O loopMIDI continua sendo necessário.
+Baixe `FightingStickMidi-Setup-<versão>.exe` na página de [Releases](https://github.com/anilsonlopes/fighting-stick/releases) e execute-o. O instalador não exige administrador, cria um atalho no menu Iniciar e oferece um atalho na área de trabalho, marcado por padrão. O loopMIDI continua sendo necessário e deve ser instalado separadamente.
+
+Para atualizar, execute o instalador da versão nova. Para desinstalar, use **Aplicativos instalados** nas Configurações do Windows. Os perfis em `%APPDATA%\FightingStickMidi` são preservados na desinstalação.
 
 ### Compilar o código-fonte
 
@@ -34,8 +36,8 @@ Consulte [arquitetura e decisões](docs/ARCHITECTURE.md) e [solução de problem
 O workflow `.github/workflows/release.yml` compila e publica automaticamente ao receber uma tag `v*`:
 
 ```powershell
-git tag -a v0.2.0 -m "Fighting Stick MIDI v0.2.0"
-git push origin v0.2.0
+git tag -a v0.1.3 -m "Fighting Stick MIDI v0.1.3"
+git push origin v0.1.3
 ```
 
-Cada Release contém somente o executável Windows. A documentação fica acessível pelo menu **Ajuda** do aplicativo e pelo repositório. A pasta local `target/` permanece fora do Git.
+Antes de criar a tag, ajuste a versão em `Cargo.toml` para o mesmo número (sem o prefixo `v`). Cada Release contém somente o instalador Windows. A documentação fica acessível pelo menu **Ajuda** do aplicativo e pelo repositório. As pastas locais `target/` e `dist/` permanecem fora do Git.

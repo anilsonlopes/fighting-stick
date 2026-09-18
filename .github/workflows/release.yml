@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   release:
-    runs-on: windows-latest
+    runs-on: windows-2025
     steps:
       - name: Checkout source
         uses: actions/checkout@v5
@@ -23,17 +23,55 @@ jobs:
           cargo --version
           cmake --version
 
+      - name: Check release version
+        shell: pwsh
+        run: |
+          $metadata = cargo metadata --no-deps --format-version 1 | ConvertFrom-Json
+          if ($LASTEXITCODE -ne 0) { throw "Não foi possível ler a versão do Cargo." }
+          $version = ($metadata.packages | Where-Object name -eq 'fighting-stick-desktop').version
+          if ($env:GITHUB_REF_NAME -ne "v$version") {
+            throw "Tag $env:GITHUB_REF_NAME não corresponde à versão $version do aplicativo."
+          }
+          Add-Content -Path $env:GITHUB_ENV -Value "APP_VERSION=$version"
+
       - name: Test workspace
         run: cargo test --workspace --locked
 
       - name: Build application
         run: cargo build --release --locked -p fighting-stick-desktop
 
-      - name: Package application
+      - name: Build installer
         shell: pwsh
         run: |
-          New-Item -ItemType Directory -Path "dist" -Force | Out-Null
-          Copy-Item "target/release/fighting-stick-desktop.exe" "dist/FightingStickMidi.exe"
+          $iscc = @(
+            "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+            "$env:ProgramFiles\Inno Setup 6\ISCC.exe"
+          ) | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+          if (-not $iscc) { throw 'Inno Setup 6 não foi encontrado no runner.' }
+          & $iscc "/DAppVersion=$env:APP_VERSION" "installer/fighting-stick.iss"
+          if ($LASTEXITCODE -ne 0) { throw "A compilação do instalador falhou ($LASTEXITCODE)." }
+
+      - name: Check installer
+        shell: pwsh
+        run: |
+          $installer = Join-Path $PWD "dist/FightingStickMidi-Setup-$env:APP_VERSION.exe"
+          $installDir = Join-Path $env:LOCALAPPDATA 'Programs\Fighting Stick MIDI'
+          $shortcut = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Fighting Stick MIDI\Fighting Stick MIDI.lnk'
+          $desktopShortcut = Join-Path ([Environment]::GetFolderPath('Desktop')) 'Fighting Stick MIDI.lnk'
+          & $installer /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
+          if ($LASTEXITCODE -ne 0) { throw "A instalação falhou ($LASTEXITCODE)." }
+          if (-not (Test-Path (Join-Path $installDir 'FightingStickMidi.exe'))) { throw 'Aplicativo não foi instalado.' }
+          if (-not (Test-Path $shortcut)) { throw 'Atalho do menu Iniciar não foi criado.' }
+          if (-not (Test-Path $desktopShortcut)) { throw 'Atalho padrão da área de trabalho não foi criado.' }
+          & (Join-Path $installDir 'unins000.exe') /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
+          if ($LASTEXITCODE -ne 0) { throw "A desinstalação falhou ($LASTEXITCODE)." }
+          if (Test-Path $desktopShortcut) { throw 'Atalho da área de trabalho permaneceu após desinstalar.' }
+          & $installer /VERYSILENT /SUPPRESSMSGBOXES /NORESTART '/MERGETASKS=!desktopicon'
+          if ($LASTEXITCODE -ne 0) { throw "A instalação sem atalho opcional falhou ($LASTEXITCODE)." }
+          if (-not (Test-Path $shortcut)) { throw 'Atalho do menu Iniciar não foi criado na segunda instalação.' }
+          if (Test-Path $desktopShortcut) { throw 'Atalho opcional foi criado mesmo desmarcado.' }
+          & (Join-Path $installDir 'unins000.exe') /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
+          if ($LASTEXITCODE -ne 0) { throw "A segunda desinstalação falhou ($LASTEXITCODE)." }
 
       - name: Publish GitHub Release
         shell: pwsh
@@ -41,7 +79,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "${{ github.ref_name }}" `
-            "dist/FightingStickMidi.exe#Fighting Stick MIDI para Windows x64" `
+            "dist/FightingStickMidi-Setup-$env:APP_VERSION.exe#Instalador Fighting Stick MIDI para Windows x64" `
             --verify-tag `
             --generate-notes `
             --title "Fighting Stick MIDI ${{ github.ref_name }}"
