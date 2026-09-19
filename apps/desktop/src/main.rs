@@ -6,13 +6,19 @@ use fighting_stick_core::{
 };
 use fighting_stick_input::{InputEvent, InputManager};
 use fighting_stick_midi::MidiOut;
-use std::{collections::BTreeSet, path::PathBuf, time::Duration};
+use std::{collections::BTreeSet, path::PathBuf, sync::Arc, time::Duration};
 
 fn main() -> eframe::Result<()> {
+    let icon = egui::IconData {
+        rgba: include_bytes!("../assets/icon.rgba").to_vec(),
+        width: 256,
+        height: 256,
+    };
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size([850.0, 650.0])
-            .with_min_inner_size([680.0, 480.0]),
+            .with_min_inner_size([680.0, 480.0])
+            .with_icon(Arc::new(icon)),
         ..Default::default()
     };
     eframe::run_native(
