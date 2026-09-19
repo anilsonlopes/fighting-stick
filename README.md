@@ -36,8 +36,8 @@ Consulte [arquitetura e decisões](docs/ARCHITECTURE.md) e [solução de problem
 O workflow `.github/workflows/release.yml` compila e publica automaticamente ao receber uma tag `v*`:
 
 ```powershell
-git tag -a v0.1.3 -m "Fighting Stick MIDI v0.1.3"
-git push origin v0.1.3
+git tag -a v0.1.4 -m "Fighting Stick MIDI v0.1.4"
+git push origin v0.1.4
 ```
 
 Antes de criar a tag, ajuste a versão em `Cargo.toml` para o mesmo número (sem o prefixo `v`). Cada Release contém somente o instalador Windows. A documentação fica acessível pelo menu **Ajuda** do aplicativo e pelo repositório. As pastas locais `target/` e `dist/` permanecem fora do Git.

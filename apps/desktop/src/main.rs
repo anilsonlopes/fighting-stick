@@ -1,3 +1,5 @@
+#![cfg_attr(target_os = "windows", windows_subsystem = "windows")]
+
 use eframe::egui::{self, Color32, RichText};
 use fighting_stick_core::{
     load_profile, note_name, save_profile, MidiState, PhysicalInput, Profile, APP_DIR,
@@ -224,7 +226,7 @@ impl eframe::App for App {
                         ui.strong("Entrada física");
                         ui.strong("Nota");
                         ui.strong("Nome");
-                        ui.strong("Learn");
+                        ui.strong("Aprender");
                         ui.end_row();
                         for row in 0..p.assignments.len() {
                             let input = p.assignments[row].input.clone();
