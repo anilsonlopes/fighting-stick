@@ -56,22 +56,22 @@ jobs:
         run: |
           $installer = Join-Path $PWD "dist/FightingStickMidi-Setup-$env:APP_VERSION.exe"
           $installDir = Join-Path $env:LOCALAPPDATA 'Programs\Fighting Stick MIDI'
-          $shortcut = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Fighting Stick MIDI\Fighting Stick MIDI.lnk'
-          $desktopShortcut = Join-Path ([Environment]::GetFolderPath('Desktop')) 'Fighting Stick MIDI.lnk'
-          & $installer /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
-          if ($LASTEXITCODE -ne 0) { throw "A instalação falhou ($LASTEXITCODE)." }
+          $shortcut = Join-Path ([Environment]::GetFolderPath('Programs')) 'Fighting Stick MIDI\Fighting Stick MIDI.lnk'
+          $desktopShortcut = Join-Path ([Environment]::GetFolderPath('DesktopDirectory')) 'Fighting Stick MIDI.lnk'
+          $install = Start-Process -FilePath $installer -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART' -Wait -PassThru
+          if ($install.ExitCode -ne 0) { throw "A instalação falhou ($($install.ExitCode))." }
           if (-not (Test-Path (Join-Path $installDir 'FightingStickMidi.exe'))) { throw 'Aplicativo não foi instalado.' }
           if (-not (Test-Path $shortcut)) { throw 'Atalho do menu Iniciar não foi criado.' }
           if (-not (Test-Path $desktopShortcut)) { throw 'Atalho padrão da área de trabalho não foi criado.' }
-          & (Join-Path $installDir 'unins000.exe') /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
-          if ($LASTEXITCODE -ne 0) { throw "A desinstalação falhou ($LASTEXITCODE)." }
+          $uninstall = Start-Process -FilePath (Join-Path $installDir 'unins000.exe') -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART' -Wait -PassThru
+          if ($uninstall.ExitCode -ne 0) { throw "A desinstalação falhou ($($uninstall.ExitCode))." }
           if (Test-Path $desktopShortcut) { throw 'Atalho da área de trabalho permaneceu após desinstalar.' }
-          & $installer /VERYSILENT /SUPPRESSMSGBOXES /NORESTART '/MERGETASKS=!desktopicon'
-          if ($LASTEXITCODE -ne 0) { throw "A instalação sem atalho opcional falhou ($LASTEXITCODE)." }
+          $install = Start-Process -FilePath $installer -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/MERGETASKS=!desktopicon' -Wait -PassThru
+          if ($install.ExitCode -ne 0) { throw "A instalação sem atalho opcional falhou ($($install.ExitCode))." }
           if (-not (Test-Path $shortcut)) { throw 'Atalho do menu Iniciar não foi criado na segunda instalação.' }
           if (Test-Path $desktopShortcut) { throw 'Atalho opcional foi criado mesmo desmarcado.' }
-          & (Join-Path $installDir 'unins000.exe') /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
-          if ($LASTEXITCODE -ne 0) { throw "A segunda desinstalação falhou ($LASTEXITCODE)." }
+          $uninstall = Start-Process -FilePath (Join-Path $installDir 'unins000.exe') -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART' -Wait -PassThru
+          if ($uninstall.ExitCode -ne 0) { throw "A segunda desinstalação falhou ($($uninstall.ExitCode))." }
 
       - name: Publish GitHub Release
         shell: pwsh
